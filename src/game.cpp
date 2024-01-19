@@ -19,8 +19,7 @@ void Game::init() {
     onConfigChange();
 
     // Loads the texture
-    texture = LoadTexture("assets/mountain-view-1.jpg");
-    grayscaleShader = LoadShader(0, "src/shader/grayscale.fs");
+    texture = LoadTexture("assets/mountain-view-1.png");
 }
 
 void Game::deinit() {
@@ -46,9 +45,9 @@ void Game::draw() const {
 
     BeginDrawing();
         ClearBackground(BLACK);
-        if (IsKeyPressed(KEY_A)) BeginShaderMode(grayscaleShader);
-            DrawTexture(texture, 0, 0, WHITE);
-        if (IsKeyPressed(KEY_A)) EndShaderMode();
+        float heightScale = (float)GetScreenHeight() / (float)texture.height;
+        float widthScale = (float)GetScreenWidth() / (float)texture.width;
+        DrawTextureEx(texture, (Vector2){0, 0}, 0.f, std::max(heightScale, widthScale), WHITE);
     EndDrawing();
 }
 
