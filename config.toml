@@ -1,0 +1,10 @@
+# Config file for this raylib testing
+# -- WINDOW INFO --
+base_width  = 768
+base_height = 480
+
+# -- FRAMERATE CONFIG --
+show_fps_counter = true
+lock_framerate   = true  # Locks the framerate to the value of 'target_framerate'
+target_framerate = 30    # In Frames Per Second (FPS)
+sync_framerate_to_monitor_refresh_rate = true  # Takes precedence over the 'lock_framerate'
