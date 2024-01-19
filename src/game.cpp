@@ -1,4 +1,5 @@
 #include "game.h"
+#include <iostream>
 
 Game::Game() {
     // Loads the TOML config
@@ -33,21 +34,36 @@ void Game::update() {
     if (IsKeyPressed(KEY_K)) {
         reloadConfig();
     }
+
+    // Updates the water shader
+    m_waterShader.update();
 }
 
 void Game::draw() const {
     /**
      * \brief Is responsible for most draw calls each frame.
     */
-    // Displays the framerate counter if wanted
-    if (toml::find<bool>(*m_config, "show_fps_counter"))
-        DrawFPS(3, 3);
-
     BeginDrawing();
         ClearBackground(BLACK);
-        float heightScale = (float)GetScreenHeight() / (float)texture.height;
-        float widthScale = (float)GetScreenWidth() / (float)texture.width;
-        DrawTextureEx(texture, (Vector2){0, 0}, 0.f, std::max(heightScale, widthScale), WHITE);
+
+        // Draws the water shader
+        m_waterShader.draw();
+
+        // Displays the framerate counter if wanted
+        if (toml::find<bool>(*m_config, "show_fps_counter")) {
+            Color color = LIME;                         // Good FPS
+            int fps = GetFPS();
+
+            if ((fps < 30) && (fps >= 15)) color = ORANGE;  // Warning FPS
+            else if (fps < 15) color = RED;             // Low FPS
+
+            const int fontSize = 20;
+            const char* fpsText = TextFormat("%2i FPS", fps);
+            const int textWidth = MeasureText(fpsText, fontSize);
+
+            DrawRectangle(0, 0, textWidth + 13, fontSize + 9, BLACK);
+            DrawText(fpsText, 6, 6, fontSize, color);
+        }
     EndDrawing();
 }
 

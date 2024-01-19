@@ -4,13 +4,15 @@
 #include <raylib.h>
 #include <toml.hpp>
 
+#include "water_shader.h"
+
 
 class Game {
 public:
     // Member variables
     std::unique_ptr<toml::value> m_config;
     Texture2D texture;
-    Shader grayscaleShader;
+    WaterShader m_waterShader;
 
     // Constructor
     Game();
@@ -51,4 +53,9 @@ public:
      * \brief Reloads the config from the config file.
     */
     void reloadConfig();
+
+    /**
+     * \brief Loads a new water shader.
+    */
+    void loadWaterShader();
 };
