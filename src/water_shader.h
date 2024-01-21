@@ -14,6 +14,7 @@ protected:
     int m_uniformTimeLocation;
     float m_waveCoefficients[NB_WAVE_COEFFICIENTS];
     int m_uniformWaveCoefficientsLocation;
+    int m_uniformResolutionLocation;
 
 public:
     /**

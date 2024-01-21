@@ -32,6 +32,9 @@ WaterShader::WaterShader() {
     SetShaderValue(m_WaterShader, uniformNbWaveCoefficientsLocation, &NB_WAVE_COEFFICIENTS, SHADER_UNIFORM_INT);
     for (int i = 0; i < NB_WAVE_COEFFICIENTS; i++)
         SetShaderValue(m_WaterShader, m_uniformWaveCoefficientsLocation + i, &m_waveCoefficients[i], SHADER_UNIFORM_FLOAT);
+    m_uniformResolutionLocation = GetShaderLocation(m_WaterShader, "resolution");
+    Vector2 screenResolution = {(float)GetScreenHeight(), (float)GetScreenWidth()};
+    SetShaderValue(m_WaterShader, m_uniformResolutionLocation, &screenResolution, SHADER_UNIFORM_VEC2);
 }
 
 WaterShader::~WaterShader() {
@@ -44,6 +47,8 @@ WaterShader::~WaterShader() {
 void WaterShader::update() {
     m_time = (float)GetTime();
     SetShaderValue(m_WaterShader, m_uniformTimeLocation, &m_time, SHADER_UNIFORM_FLOAT);
+    Vector2 screenResolution = {(float)GetScreenHeight(), (float)GetScreenWidth()};
+    SetShaderValue(m_WaterShader, m_uniformResolutionLocation, &screenResolution, SHADER_UNIFORM_VEC2);
 }
 
 void WaterShader::draw() const {
