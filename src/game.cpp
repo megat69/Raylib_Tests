@@ -51,11 +51,11 @@ void Game::draw() const {
 
         // Displays the framerate counter if wanted
         if (toml::find<bool>(*m_config, "show_fps_counter")) {
-            Color color = LIME;                         // Good FPS
+            Color color = LIME;                             // Good FPS
             int fps = GetFPS();
 
             if ((fps < 30) && (fps >= 15)) color = ORANGE;  // Warning FPS
-            else if (fps < 15) color = RED;             // Low FPS
+            else if (fps < 15) color = RED;                 // Low FPS
 
             const int fontSize = 20;
             const char* fpsText = TextFormat("%2i FPS", fps);
