@@ -19,12 +19,21 @@ void Game::init() {
     // Loads the config
     onConfigChange();
 
-    // Loads the texture
-    texture = LoadTexture("assets/mountain-view-1.png");
+    // Loads the render targets, one with a pixel art size, and the UI one with the window size
+    m_renderTarget = LoadRenderTexture(RENDER_TARGET_WIDTH, RENDER_TARGET_HEIGHT);
+    m_UiTarget = LoadRenderTexture(GetScreenWidth(), GetScreenHeight());
+
+    // Initializes the water shader
+    m_waterShader.init();
 }
 
 void Game::deinit() {
-    UnloadTexture(texture);
+    // Deinits the water shader
+    m_waterShader.deinit();
+
+    // Unloads the render targets
+    UnloadRenderTexture(m_renderTarget);
+    UnloadRenderTexture(m_UiTarget);
 }
 
 void Game::update() {
@@ -43,11 +52,41 @@ void Game::draw() const {
     /**
      * \brief Is responsible for most draw calls each frame.
     */
-    BeginDrawing();
-        ClearBackground(BLACK);
+    // Draws to the render target
+    BeginTextureMode(m_renderTarget);
+        ClearBackground(BLANK);
 
         // Draws the water shader
         m_waterShader.draw();
+    EndTextureMode();
+
+    // Draws to the UI render target
+    BeginTextureMode(m_UiTarget);
+        ClearBackground(BLANK);
+    EndTextureMode();
+
+    // Draws the render target then the render UI
+    BeginDrawing();
+        Color drySand{(unsigned char)(0.964 * 255), (unsigned char)(0.843 * 255), (unsigned char)(0.69 * 255), 255};
+        ClearBackground(drySand);
+
+        // Draws the render target
+        DrawTexturePro(
+            m_renderTarget.texture, 
+            (Rectangle) { 
+                0, 0, 
+                (float)m_renderTarget.texture.width, (float)-m_renderTarget.texture.height 
+            }, 
+            (Rectangle) { 
+                0, 0, 
+                (float)GetScreenWidth(), (float)GetScreenHeight()
+            }, 
+            (Vector2) { 0, 0 }, 0.f,
+            WHITE
+        );
+
+        // Draws the UI render target
+        DrawTextureRec(m_UiTarget.texture, (Rectangle) { 0, 0, (float)m_UiTarget.texture.width, (float)-m_UiTarget.texture.height }, (Vector2) { 0, 0 }, WHITE);
 
         // Displays the framerate counter if wanted
         if (toml::find<bool>(*m_config, "show_fps_counter")) {
@@ -83,6 +122,26 @@ void Game::onConfigChange() {
     
     else
         SetTargetFPS(0);
+    
+    // Changes to window resolution
+    SetWindowSize(toml::find<int>(*m_config, "base_width"), toml::find<int>(*m_config, "base_height"));
+
+    // Changes to screen mode
+    char screenMode = toml::find<char>(*m_config, "screen_mode");  // 0 for WINDOWED, 1 for EXCLUSIVE FULLSCREEN, 2 for BORDERLESS WINDOWED
+    switch (screenMode) {
+        case 0:  // WINDOWED
+            if (IsWindowFullscreen())
+                ToggleFullscreen();
+            break;
+        case 1:  // FULLSCREEN EXCLUSIVE
+            if (!IsWindowFullscreen())
+                ToggleFullscreen();
+            break;
+        case 2:  // BORDERLESS WINDOWED
+            if (!IsWindowState(FLAG_BORDERLESS_WINDOWED_MODE))
+                ToggleBorderlessWindowed();
+            break;
+    }
 }
 
 void Game::reloadConfig() {

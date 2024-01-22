@@ -4,14 +4,16 @@
 #include <raylib.h>
 #include <toml.hpp>
 
+#include "constants.h"
 #include "water_shader.h"
 
 
 class Game {
 public:
     // Member variables
-    std::unique_ptr<toml::value> m_config;
-    Texture2D texture;
+    std::unique_ptr<toml::value> m_config;  // Unique pointer to the config data
+    RenderTexture2D m_renderTarget;         // Render texture of pre-defined size for every in-game element
+    RenderTexture2D m_UiTarget;             // Render texture for the game's UI, same size as the window
     WaterShader m_waterShader;
 
     // Constructor

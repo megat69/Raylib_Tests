@@ -1,7 +1,12 @@
 #include "water_shader.h"
 
 
-WaterShader::WaterShader() {
+WaterShader::WaterShader() {}
+
+WaterShader::~WaterShader() {}
+
+
+void WaterShader::init() {
     // Creates the perlin noise
     Image perlin1 = GenImagePerlinNoise(PERLIN_NOISE_SIZE, PERLIN_NOISE_SIZE, 0, 0, 1.f);
     Image perlin2 = GenImagePerlinNoise(PERLIN_NOISE_SIZE, PERLIN_NOISE_SIZE, 0, 0, 1.f);
@@ -14,7 +19,7 @@ WaterShader::WaterShader() {
     m_WaterShader = LoadShader(0, "src/shader/water_shader.fs");
 
     // Loads the texture for the water shader
-    Image blankImage = GenImageColor(GetScreenWidth(), GetScreenHeight(), BLANK);
+    Image blankImage = GenImageColor(RENDER_TARGET_WIDTH, RENDER_TARGET_HEIGHT, BLANK);
     m_WaterTexture = LoadTextureFromImage(blankImage);
     UnloadImage(blankImage);
 
@@ -33,11 +38,11 @@ WaterShader::WaterShader() {
     for (int i = 0; i < NB_WAVE_COEFFICIENTS; i++)
         SetShaderValue(m_WaterShader, m_uniformWaveCoefficientsLocation + i, &m_waveCoefficients[i], SHADER_UNIFORM_FLOAT);
     m_uniformResolutionLocation = GetShaderLocation(m_WaterShader, "resolution");
-    Vector2 screenResolution = {(float)GetScreenHeight(), (float)GetScreenWidth()};
+    Vector2 screenResolution = {(float)RENDER_TARGET_HEIGHT, (float)RENDER_TARGET_WIDTH};
     SetShaderValue(m_WaterShader, m_uniformResolutionLocation, &screenResolution, SHADER_UNIFORM_VEC2);
 }
 
-WaterShader::~WaterShader() {
+void WaterShader::deinit() {
     UnloadTexture(m_Perlin1);
     UnloadTexture(m_Perlin2);
     UnloadShader(m_WaterShader);
@@ -59,4 +64,9 @@ void WaterShader::draw() const {
 
 const Texture2D& WaterShader::getWaterTexture() const {
     return m_WaterTexture;
+}
+
+
+void WaterShader::onConfigChange() {
+    
 }
