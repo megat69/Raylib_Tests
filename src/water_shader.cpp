@@ -45,7 +45,7 @@ void WaterShader::deinit() {
 }
 
 void WaterShader::update() {
-    m_time = (float)GetTime();
+    m_time += (float)GetFrameTime();  // Allows to calculate the unpaused time
     SetShaderValue(m_WaterShader, m_uniformTimeLocation, &m_time, SHADER_UNIFORM_FLOAT);
     Vector2 screenResolution = {(float)GetScreenHeight(), (float)GetScreenWidth()};
     SetShaderValue(m_WaterShader, m_uniformResolutionLocation, &screenResolution, SHADER_UNIFORM_VEC2);

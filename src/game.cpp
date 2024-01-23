@@ -44,11 +44,12 @@ void Game::update() {
         reloadConfig();
     }
 
-    // Updates the water shader
-    m_waterShader.update();
-
     // Updates the options menu
     m_optionsMenu.update();
+
+    // Updates the water shader if the game is not paused
+    if (!m_optionsMenu.isOpen())
+        m_waterShader.update();
 }
 
 void Game::draw() const {
