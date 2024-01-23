@@ -130,6 +130,8 @@ void Game::onConfigChange() {
     char screenMode = toml::find<char>(*m_config, "screen_mode");  // 0 for WINDOWED, 1 for EXCLUSIVE FULLSCREEN, 2 for BORDERLESS WINDOWED
     switch (screenMode) {
         case 0:  // WINDOWED
+            if (IsWindowState(FLAG_BORDERLESS_WINDOWED_MODE))
+                ToggleBorderlessWindowed();
             if (IsWindowFullscreen())
                 ToggleFullscreen();
             break;

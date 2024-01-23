@@ -2,7 +2,7 @@
 # -- WINDOW INFO --
 base_width  = 1280
 base_height = 720
-screen_mode = 2  # 0 for WINDOWED, 1 for EXCLUSIVE FULLSCREEN, 2 for BORDERLESS WINDOWED
+screen_mode = 0  # 0 for WINDOWED, 1 for EXCLUSIVE FULLSCREEN, 2 for BORDERLESS WINDOWED
 
 # -- FRAMERATE CONFIG --
 show_fps_counter = true
