@@ -1,5 +1,5 @@
 #include "water_shader.h"
-
+#include <iostream>
 
 WaterShader::WaterShader() {}
 
@@ -8,12 +8,7 @@ WaterShader::~WaterShader() {}
 
 void WaterShader::init() {
     // Creates the perlin noise
-    Image perlin1 = GenImagePerlinNoise(PERLIN_NOISE_SIZE, PERLIN_NOISE_SIZE, 0, 0, 1.f);
-    Image perlin2 = GenImagePerlinNoise(PERLIN_NOISE_SIZE, PERLIN_NOISE_SIZE, 0, 0, 1.f);
-    m_Perlin1 = LoadTextureFromImage(perlin1);
-    m_Perlin2 = LoadTextureFromImage(perlin2);
-    UnloadImage(perlin1);
-    UnloadImage(perlin2);
+    loadNewPerlin(false);
 
     // Loads the water shader
     m_WaterShader = LoadShader(0, "src/shader/water_shader.fs");
@@ -68,5 +63,18 @@ const Texture2D& WaterShader::getWaterTexture() const {
 
 
 void WaterShader::onConfigChange() {
-    
+    loadNewPerlin();
+}
+
+void WaterShader::loadNewPerlin(bool unloadPreviousTextures) {
+    if (unloadPreviousTextures) {
+        UnloadTexture(m_Perlin1);
+        UnloadTexture(m_Perlin2);
+    }
+    Image perlin1 = GenImagePerlinNoise(RENDER_TARGET_WIDTH, RENDER_TARGET_HEIGHT, 0, 0, 1.f);
+    Image perlin2 = GenImagePerlinNoise(RENDER_TARGET_WIDTH, RENDER_TARGET_HEIGHT, 0, 0, 1.f);
+    m_Perlin1 = LoadTextureFromImage(perlin1);
+    m_Perlin2 = LoadTextureFromImage(perlin2);
+    UnloadImage(perlin1);
+    UnloadImage(perlin2);
 }

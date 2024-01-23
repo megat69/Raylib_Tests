@@ -17,6 +17,7 @@ protected:
     float m_waveCoefficients[NB_WAVE_COEFFICIENTS];
     int m_uniformWaveCoefficientsLocation;
     int m_uniformResolutionLocation;
+    int m_uniformPerlinLocation[2];
 
 public:
     /**
@@ -31,6 +32,7 @@ public:
     void draw() const;
 
     void onConfigChange();  // Gets called when the config is reloaded
+    void loadNewPerlin(bool unloadPreviousTextures = true);
 
     const Texture2D& getWaterTexture() const;
 };
