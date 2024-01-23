@@ -46,6 +46,9 @@ void Game::update() {
 
     // Updates the water shader
     m_waterShader.update();
+
+    // Updates the options menu
+    m_optionsMenu.update();
 }
 
 void Game::draw() const {
@@ -63,6 +66,9 @@ void Game::draw() const {
     // Draws to the UI render target
     BeginTextureMode(m_UiTarget);
         ClearBackground(BLANK);
+
+        // Draws the UI menu
+        m_optionsMenu.draw();
     EndTextureMode();
 
     // Draws the render target then the render UI

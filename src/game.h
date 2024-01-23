@@ -6,6 +6,7 @@
 
 #include "constants.h"
 #include "water_shader.h"
+#include "options_menu.h"
 
 
 class Game {
@@ -15,6 +16,7 @@ public:
     RenderTexture2D m_renderTarget;         // Render texture of pre-defined size for every in-game element
     RenderTexture2D m_UiTarget;             // Render texture for the game's UI, same size as the window
     WaterShader m_waterShader;
+    OptionsMenu m_optionsMenu;
 
     // Constructor
     Game();
