@@ -5,6 +5,12 @@
 #include "constants.h"
 
 
+struct OptionsMenuRenderProperties {
+    RenderTexture2D renderTarget;
+    int positionY;
+};
+
+
 /**
  * \brief Handles the options menu.
 */
@@ -13,15 +19,19 @@ protected:
     bool _isOpen, animationInProgress;
     int overlayPosition;
     double animationProgress;
+    RenderTexture2D renderTarget;
 
     // Static constants
     static float menuOpeningDuration;
+    static Color overlayColor;
 
 public:
     OptionsMenu();
+    ~OptionsMenu();
     void init();
     void update();
-    void draw() const;
+    const OptionsMenuRenderProperties draw() const;
+    void onConfigChange();
 
     /**
      * \brief Whether the menu currently is open.

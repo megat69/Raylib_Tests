@@ -64,12 +64,13 @@ void Game::draw() const {
         m_waterShader.draw();
     EndTextureMode();
 
+    // Gets the UI render textures
+    OptionsMenuRenderProperties optionsMenuDrawProperties = m_optionsMenu.draw();
+
     // Draws to the UI render target
     BeginTextureMode(m_UiTarget);
         ClearBackground(BLANK);
-
-        // Draws the UI menu
-        m_optionsMenu.draw();
+        DrawTextureRec(optionsMenuDrawProperties.renderTarget.texture, (Rectangle) { 0, 0, (float)optionsMenuDrawProperties.renderTarget.texture.width, (float)-optionsMenuDrawProperties.renderTarget.texture.height }, (Vector2) { 0, (float)optionsMenuDrawProperties.positionY }, WHITE);
     EndTextureMode();
 
     // Draws the render target then the render UI
